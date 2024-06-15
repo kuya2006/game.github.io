@@ -38,9 +38,9 @@
             margin:0 auto;
           }
         </style>
-<audio src="フィールド.mp3" preload="auto"></audio>
-<audio src="ボス.mp3" preload="auto"></audio>
-<audio src="ゲームオーバー.mp3" preload="auto"></audio>
+<audio src="field.mp3" preload="auto"></audio>
+<audio src="boss.mp3" preload="auto"></audio>
+<audio src="gameover.mp3" preload="auto"></audio>
 <script>
 const canvas0 = document.getElementById('layer0');
 const ctx0 = canvas0.getContext('2d');
@@ -231,7 +231,7 @@ function putmon(){
       ctx2.fillText(monster[i][3],monster[i][1],425,250);
       ctx2.strokeStyle='#fff';
       ctx2.strokeText(monster[i][3],monster[i][1],425,250);
-      img1.src='スライム.png';
+      img1.src='slime.png';
     }else if(monster[i][0]===2){
       var img2 = new Image();
       img2.onload = function(){
@@ -243,7 +243,7 @@ function putmon(){
       ctx2.fillText(monster[i][3],monster[i][1],425,250);
       ctx2.strokeStyle='#fff';
       ctx2.strokeText(monster[i][3],monster[i][1],425,250);
-      img2.src='おおかみ.png';
+      img2.src='wolf.png';
     }else if(monster[i][0]===3){
       var img3 = new Image();
       img3.onload = function(){
@@ -255,7 +255,7 @@ function putmon(){
       ctx2.fillText(monster[i][3],monster[i][1],425,250);
       ctx2.strokeStyle='#fff';
       ctx2.strokeText(monster[i][3],monster[i][1],425,250);
-      img3.src='まほうつかい.png';
+      img3.src='magicker.png';
     }else if(monster[i][0]===100){
       var img100 = new Image();
       img100.onload = function(){
@@ -267,7 +267,7 @@ function putmon(){
       ctx2.fillText(monster[i][3],monster[i][1],425,250);
       ctx2.strokeStyle='#fff';
       ctx2.strokeText(monster[i][3],monster[i][1],425,250);
-      img100.src='さをり.png';
+      img100.src='sawori.png';
       ctx1.clearRect(0,0,canvas1.width,canvas1.height);
       if(t!==3){
       t=3;
@@ -422,12 +422,12 @@ var imgb = new Image();
 imgb.onload = function(){
 ctx1.drawImage(imgb,0,0);
 };
-imgb.src='img/back.png';
+imgb.src='background.png';
 var boss = new Image();
 boss.onload = function(){
 ctx0.drawImage(boss,0,0);
 };
-boss.src='img/boss.png';
+boss.src='bossground.png';
 create();
 
 //ボタンを監視する
