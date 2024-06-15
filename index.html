@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title> ゴミゲーム一号   </title>
+    <style>
+      body,html {
+        padding: 0;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      canvas {
+        display: block;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage">
+       <canvas id="layer0" width="1080" height="770"></canvas>
+       <canvas id="layer1" width="1080" height="770"></canvas>
+       <canvas id="layer2" width="1080" height="770"></canvas>
+       <canvas id="layer3" width="1080" height="770"></canvas>
+       <canvas id="layer4" width="1080" height="770"></canvas>
+    </div>
+       <style>
+          .stage {
+            position: relative;
+            padding:0;
+            margin:0;
+          }
+        
+          .stage canvas {
+            position: absolute;
+            top:0;
+            left:0;
+            display:block;
+            margin:0 auto;
+          }
+        </style>
+<audio src="フィールド.mp3" preload="auto"></audio>
+<audio src="ボス.mp3" preload="auto"></audio>
+<audio src="ゲームオーバー.mp3" preload="auto"></audio>
+<script>
+const canvas0 = document.getElementById('layer0');
+const ctx0 = canvas0.getContext('2d');
+  
+const canvas1 = document.getElementById('layer1');
+const ctx1 = canvas1.getContext('2d');
+
+const canvas2 = document.getElementById('layer2');
+const ctx2 = canvas2.getContext('2d');
+
+const canvas3 = document.getElementById('layer3');
+const ctx3 = canvas3.getContext('2d');
+
+const canvas4 = document.getElementById('layer4');
+const ctx4 = canvas4.getContext('2d');
+
+const bgm1 = new Audio('bgm1.mp3');
+const bgm2 = new Audio('bgm2.mp3');
+const bgm3 = new Audio('bgm3.mp3');
+
+
+//初期値の設定
+
+//まず規定値として、ボタンが押されてないことにする
+let rightPressed = false;
+let leftPressed = false;
+let enterPressed = false;
+let timen=0;
+let score=0;
+let Dscore=0;
+//ステージの値
+let stage = 1;
+//判定ラインの位置
+let linex = 300;
+//判定ラインの1Fの移動量
+let linespeed = Math.floor(7+stage*1.5);
+//強敵になる確率
+let mimim= 0.005;
+let grow = stage*mimim;
+//モンスター[番号,左座標,右座標,数値]
+let monster = [[1,20,0,20],[1,300,0,5]];
+//プレイヤー数値
+let player = 10;
+//何番目のモンスターに剣が当たったか記録する(0は当たっていない)
+let hit = 0;
+//1平原2ジャングル3洞窟4鏡5城6ボス
+let t = 1;
+//時間
+let time = 0;
+//
+let start=false;
+//
+let monstercnt=-2;
+//
+let play;
+//
+let per=1;
+//
+let clearp=100;
+//functions:
+
+//モンスターの割り振り関数
+function create(){
+  if (stage%3 === 1){
+    monster = [[1,20,0,0],[2,285,0,0],[2,550,0,0],[1,815,0,0]];
+    monstercnt+=2;
+    grow = stage*mimim;
+    if(stage!==1){
+    per*=(1-grow)**4;
+    }else{
+      grow=0;
+    }
+  }else if (stage%3 === 2){
+    monster = [[2,90,0,0],[1,440,0,0],[2,790,0,0]];
+    monstercnt+=4;
+    grow = stage*mimim;
+    per*=(1-grow)**3;
+  }else{
+    monster = [[3,170,0,0],[3,670,0,0]];
+    monstercnt+=3;
+    grow = stage*mimim;
+    per*=(1-grow)**2;
+    
+  }
+  give();
+  putmon();
+}
+
+//自分の状況を表示する
+function status(){
+  ctx3.beginPath();
+  ctx3.fillStyle='#999';
+  ctx3.fillRect(30,650,1020,100);
+  ctx3.fillStyle='#000';
+  ctx3.rect(30,650,1020,100);
+  ctx3.fillStyle='#0f9';
+  ctx3.font='50px Roboto midium';
+  ctx3.fillText('Lv.'+player,550,700,450);
+  ctx3.fillText('Stage:'+stage,50,700,500);
+  ctx3.closePath();
+}
+
+//音楽の再生
+function musicset(){
+if(start===true){
+  bgm1.pause();
+  bgm2.pause();
+  bgm3.pause();
+}
+if(t===1){
+  bgm1.volume=0.3;
+  bgm2.volume=0.3;
+  bgm3.volume=0.3;
+  start=true;
+  bgm1.loop=true;
+  bgm2.loop=true;
+  bgm3.loop=true;
+  bgm1.play();
+  loading();
+  setTimeout(() => {play = setInterval(function(){draw();},10);},5500);
+} else if(t===2){
+  bgm2.play();
+}else if (t===3){
+  bgm3.play();
+  
+}
+
+}
+function lsort(a,b){
+  return a-b;
+}
+//モンスターに強さを付与する
+function give(){
+  let m = [];
+  let temp = player;
+  let p = [];
+  for (let k = 0; k < monster.length; k++){
+    m.push(monster[k][0]);
+  }
+  for (let s = 0; s < 10; s++){
+    let cnt = m.filter(n => n === s).length;
+    if (cnt > 0){
+      for (let l = 0; l < cnt; l++){
+        let per = Math.random();
+        if (per <= grow && stage!==1){
+          let sta = Math.floor((10**99999999999999999999));
+          p.push([sta,1]);
+        }else{
+          let sta = Math.floor(temp * (0.5+Math.random()/2));
+          temp += sta;
+          p.push([sta,0]);
+        }
+      }
+    }
+  }
+  p.sort(lsort);
+  for (let h = 0; h < 10; h++){
+    let velt = [];
+    let idx = m.indexOf(h);
+    while (idx !== -1) {
+      velt.push(idx);
+      idx = m.indexOf(h, idx + 1);
+    }
+    while (velt.length !== 0){
+      let ind = Math.floor(Math.random() * velt.length);
+      let n = velt[ind];
+      monster[n][3] = p[0][0];
+      velt.splice(ind,1);
+      if(p[0][1]===1){
+        monster[n][0] = 100;
+      }
+      p.splice(0,1);
+    }
+  }
+}
+
+//モンスターを配置する
+function putmon(){
+  for (let i = 0; i < monster.length; i++){
+    if(monster[i][0]===1){
+      var img1 = new Image();
+      img1.onload = function(){
+        ctx2.drawImage(img1, monster[i][1], 375 - img1.height);
+        monster[i][2]=monster[i][1] + img1.width;
+      };
+      ctx2.font='50px Roboto midium';
+      ctx2.fillStyle='#55f';
+      ctx2.fillText(monster[i][3],monster[i][1],425,250);
+      ctx2.strokeStyle='#fff';
+      ctx2.strokeText(monster[i][3],monster[i][1],425,250);
+      img1.src='スライム.png';
+    }else if(monster[i][0]===2){
+      var img2 = new Image();
+      img2.onload = function(){
+        ctx2.drawImage(img2, monster[i][1], 375 - img2.height);
+        monster[i][2]=monster[i][1] + img2.width;
+      };
+      ctx2.font='50px Roboto midium';
+      ctx2.fillStyle='#55f';
+      ctx2.fillText(monster[i][3],monster[i][1],425,250);
+      ctx2.strokeStyle='#fff';
+      ctx2.strokeText(monster[i][3],monster[i][1],425,250);
+      img2.src='おおかみ.png';
+    }else if(monster[i][0]===3){
+      var img3 = new Image();
+      img3.onload = function(){
+        ctx2.drawImage(img3, monster[i][1], 375 - img3.height);
+        monster[i][2]=monster[i][1] + img3.width;
+      };
+      ctx2.font='50px Roboto midium';
+      ctx2.fillStyle='#55f';
+      ctx2.fillText(monster[i][3],monster[i][1],425,250);
+      ctx2.strokeStyle='#fff';
+      ctx2.strokeText(monster[i][3],monster[i][1],425,250);
+      img3.src='まほうつかい.png';
+    }else if(monster[i][0]===100){
+      var img100 = new Image();
+      img100.onload = function(){
+        ctx2.drawImage(img100, monster[i][1], 375 - img100.height);
+        monster[i][2]=monster[i][1] + img100.width;
+      };
+      ctx2.font='50px Roboto midium';
+      ctx2.fillStyle='#f22';
+      ctx2.fillText(monster[i][3],monster[i][1],425,250);
+      ctx2.strokeStyle='#fff';
+      ctx2.strokeText(monster[i][3],monster[i][1],425,250);
+      img100.src='さをり.png';
+      ctx1.clearRect(0,0,canvas1.width,canvas1.height);
+      if(t!==3){
+      t=3;
+      musicset();
+      }
+    }
+  }
+}
+
+//ギミック関数
+function guimick(){
+  if (stage === 2){
+    linespeed=7;
+  }//以後続く
+}
+
+//判定関数
+function judge(){
+  for (let j = 0; j < monster.length; j++){
+    if (monster[j][1] <= linex && linex <= monster[j][2]){
+      hit = j+1;
+      break;
+    }
+  }
+  if (hit ===  0){
+    //外れた音を鳴らす
+  }else if (hit > 0){
+    //当たった音を鳴らす
+    hit -= 1;
+    if (monster[hit][3] <= player){
+      player += monster[hit][3];
+      ctx2.beginPath();
+      ctx2.clearRect(0,0,canvas2.width,canvas2.height);
+      ctx2.closePath();
+      score+=monster[hit][0]*10;
+      monster.splice(hit,1);
+      putmon();
+      hit=0;
+      if (monster.length === 0){
+          clearp=Math.floor(((per))*10000000)/100000
+          stage += 1;
+          create();
+        }
+    }else{
+      clearInterval(play);
+      t=2;
+      musicset();
+      for (let f = 0; f <=10; f++){
+        ctx4.beginPath();
+        ctx4.globalAlpha=0.2;
+        ctx4.fillStyle='#fff';
+        ctx4.rect(0,0,canvas4.width,canvas4.height);
+        ctx4.fill();
+        ctx4.closePath();
+      }
+      ctx4.beginPath();
+      ctx4.globalAlpha=1.0;
+      ctx4.fillStyle='#000';
+      ctx4.font='75px Roboto midium';
+      ctx4.fillText('failure...',200,100,canvas4.width - 400);
+      ctx4.fillText('上位　'+clearp+' %',200,200,canvas4.width - 400);
+      ctx4.fillText('stage:'+stage,200,300,canvas4.width - 400);
+      ctx4.fillText('time:'+time/1000,200,400,canvas4.width - 400);
+      ctx4.fillText('Lv:'+player,200,500,canvas4.width - 400);
+      ctx4.fillText('score:'+score,200,600,canvas4.width - 400);
+      ctx4.closePath();
+    }
+  }
+}
+
+//判定ラインを描画する
+function drawline(){
+ctx3.beginPath();
+if (enterPressed){
+  ctx3.fillStyle='#00f';
+}else{
+  ctx3.fillStyle='#0ff';
+}
+ctx3.fillRect(linex,30,1,550);
+if (rightPressed){
+    linex = linex + linespeed;
+    if (linex > canvas3.width - 20){
+      linex = canvas3.width - 20;
+    }else if (linex < 20){
+      linex = 20;
+    }
+}
+if (leftPressed){
+    linex = linex - linespeed;
+    if (linex > canvas3.width - 20){
+      linex = canvas3.width - 20;
+    }else if (linex < 20){
+      linex = 20;
+    }
+}
+
+}
+
+//時間を測る
+function timer(){
+  time+=10;
+}
+
+//画面の表示すること
+function draw() {//
+timer();
+ctx4.clearRect(0, 0, canvas4.width, canvas4.height);
+ctx3.clearRect(0, 0, canvas3.width, canvas3.height);
+drawline();
+status();
+ctx4.fillStyle='#777';
+ctx4.font='25px Roboto midium';
+ctx4.fillText('突然変異出現率'+Math.floor(grow*1000)/10+'%',0,25);
+ctx4.fillText('クリア率'+Math.floor(((per))*10000000)/100000+'%',0,50);
+ctx4.fillText('Score:'+score,0,75);
+ctx4.fillText('Time:'+time/1000,0,100);
+//ctx4.strokeText('クリア率'+Math.floor(((per))*10000)/100+'%',0,25);
+//ctx4.strokeText('Score:'+score,0,50);
+//ctx4.strokeText('Time:'+time/1000,0,75);
+if (enterPressed){
+  setTimeout(judge(),3000);
+}
+enterPressed = false;
+if (monster === []){
+  stage += 1;
+  create();
+}
+}
+
+function loading(){
+ctx4.clearRect(0,0,canvas4.width,canvas4.height);
+ctx4.fillStyle='#fff';
+ctx4.fillRect(0,0,canvas4.width,canvas4.height);
+ctx4.fillStyle='#777';
+ctx4.font='100px Roboto midium';
+ctx4.fillText('Now loading...',100,385);
+}
+
+//実行 part
+
+//背景
+ctx4.fillStyle='#fff';
+ctx4.strokeStyle='#fff';
+ctx4.fillRect(0,0,canvas4.width,canvas4.height);
+ctx4.fillStyle='#777';
+ctx4.font='100px Roboto midium';
+ctx4.fillText('Press any key...',100,385);
+bgm1.load();
+bgm2.load();
+bgm3.load();
+var imgb = new Image();
+imgb.onload = function(){
+ctx1.drawImage(imgb,0,0);
+};
+imgb.src='img/back.png';
+var boss = new Image();
+boss.onload = function(){
+ctx0.drawImage(boss,0,0);
+};
+boss.src='img/boss.png';
+create();
+
+//ボタンを監視する
+
+//ボタンが押されているかを判定する
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+
+function keyDownHandler(e) {
+  if (!start){
+    musicset();
+  }
+  if (e.key === "Right" || e.key === "ArrowRight") {
+    rightPressed = true;
+  } else if (e.key === "Left" || e.key === "ArrowLeft") {
+    leftPressed = true;
+  } else if (e.key === "Enter" && !e.repeat){
+    enterPressed = true;
+  } 
+}
+function keyUpHandler(e) {
+  if (e.key === "Right" || e.key === "ArrowRight") {
+    rightPressed = false;
+  } else if (e.key === "Left" || e.key === "ArrowLeft") {
+    leftPressed = false;
+  }else if (e.key === "Enter") {
+    enterPressed = false;
+  }
+}
+    </script>
+  </body>
+</html>
