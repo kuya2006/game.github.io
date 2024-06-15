@@ -38,9 +38,9 @@
             margin:0 auto;
           }
         </style>
-<audio src="field.mp3" preload="auto"></audio>
-<audio src="boss.mp3" preload="auto"></audio>
-<audio src="gameover.mp3" preload="auto"></audio>
+<audio src="field.mp3" preload="auto" id='b1'></audio>
+<audio src="boss.mp3" preload="auto" id='b3'></audio>
+<audio src="gameover.mp3" preload="auto" id='b2'></audio>
 <script>
 const canvas0 = document.getElementById('layer0');
 const ctx0 = canvas0.getContext('2d');
@@ -57,10 +57,9 @@ const ctx3 = canvas3.getContext('2d');
 const canvas4 = document.getElementById('layer4');
 const ctx4 = canvas4.getContext('2d');
 
-const bgm1 = new Audio('field.mp3');
-const bgm2 = new Audio('gameover.mp3');
-const bgm3 = new Audio('boss.mp3');
-
+const bgm1 = document.querySelector("#b1");
+const bgm2 = document.querySelector("#b2");
+const bgm3 = document.querySelector("#b3");
 
 //初期値の設定
 
