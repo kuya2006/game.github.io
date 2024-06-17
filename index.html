@@ -383,9 +383,6 @@ ctx4.fillText('突然変異出現率'+Math.floor(grow*1000)/10+'%',0,25);
 ctx4.fillText('クリア率'+Math.floor(((per))*10000000)/100000+'%',0,50);
 ctx4.fillText('Score:'+score,0,75);
 ctx4.fillText('Time:'+time/1000,0,100);
-//ctx4.strokeText('クリア率'+Math.floor(((per))*10000)/100+'%',0,25);
-//ctx4.strokeText('Score:'+score,0,50);
-//ctx4.strokeText('Time:'+time/1000,0,75);
 if (enterPressed){
   setTimeout(judge(),3000);
 }
@@ -414,6 +411,8 @@ ctx4.fillRect(0,0,canvas4.width,canvas4.height);
 ctx4.fillStyle='#777';
 ctx4.font='100px Roboto midium';
 ctx4.fillText('Press any key...',100,385);
+ctx4.font='25px Roboto midium';
+ctx4.fillText('ver.testplay(0.9)'700,50,300);
 bgm1.load();
 bgm2.load();
 bgm3.load();
