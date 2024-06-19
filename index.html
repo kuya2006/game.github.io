@@ -77,7 +77,7 @@ let linex = 300;
 //判定ラインの1Fの移動量
 let linespeed = Math.floor(7+stage*1.5);
 //強敵になる確率
-let mimim= 0.03;
+let mimim= 0.025;
 let grow = stage*mimim;
 //モンスター[番号,左座標,右座標,数値]
 let monster = [[1,20,0,20],[1,300,0,5]];
@@ -412,7 +412,7 @@ ctx4.fillStyle='#777';
 ctx4.font='100px Roboto midium';
 ctx4.fillText('Press any key...',100,385);
 ctx4.font='25px Roboto midium';
-ctx4.fillText('ver:testplay(0.9)',900,25,180);
+ctx4.fillText('ver:testplay(0.9.25)',900,25,180);
 bgm1.load();
 bgm2.load();
 bgm3.load();
