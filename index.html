@@ -108,11 +108,9 @@ function sendJsonData() {
       {
     "action": "replace",
     "sheetName": "sales",
-    "rows": [
-        {"ステージ数": 20,
-        "クリア人数": 13,}
-    ]
+    "rows": {"ステージ数": 20,"クリア人数": 13}
 }
+
      
     //JSONにエンコード
     var json_text = JSON.stringify(json_asocc);
@@ -124,7 +122,7 @@ function sendJsonData() {
         if (res.length>0) alert(res);
     };
     xhr.onerror = function(){       //エラーが起きた時の処理（非同期）
-        alert("error!");
+        alert("ランキングデータの送信に失敗しました。");
     }
     xhr.open('post', "https://script.google.com/macros/s/AKfycbyf90ORyywJ-7axQDtmrjAlcoy38xbmzk2tia_4xZy4ZBYqdvvbA5Ic3TAX1B7pnOKBgw/exec", true);    //(1)
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -442,7 +440,7 @@ ctx4.fillStyle='#777';
 ctx4.font='100px Roboto midium';
 ctx4.fillText('Press any key...',100,385);
 ctx4.font='25px Roboto midium';
-ctx4.fillText('ver:testplay(0.9.26)',900,25,180);
+ctx4.fillText('ver:testplay(0.9.27)',900,25,180);
 bgm1.load();
 bgm2.load();
 bgm3.load();
