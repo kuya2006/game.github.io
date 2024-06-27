@@ -401,7 +401,14 @@ function judge(){
       ctx4.fillText('Lv:'+player,200,500,canvas4.width - 400);
       ctx4.fillText('score:'+score,200,600,canvas4.width - 400);
       ctx4.closePath();
-      sendJsonData();
+      const body = JSON.stringify({
+  "action": "replace",
+  "sheetName": "ranking",
+  "rows": [{"ステージ数": "20", "クリア人数": 34}]
+      });
+$.post("https://script.google.com/macros/s/AKfycbxR9Z0kjLL4KwQlB4vPq31iPDan9_PlGg14Nh84ZdDk-pqfsYF7rCeC_K9BpA_gc4q7Kg/exec", body, (data, status) => {
+  console.log(data);
+});
     }
   }
 }
