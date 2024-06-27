@@ -104,13 +104,13 @@ let clearp=100;
 //ランキング送信テスト
 function sendJsonData() {
     //連想配列
-    var json_asocc =[  {
+    var json_asocc ={
   "action": "replace",
   "sheetName": "ranking",
   "rows": [
     {"ステージ数": "20", "クリア人数": 13}
   ]
-}];
+};
 
      
     //JSONにエンコード
@@ -120,12 +120,12 @@ function sendJsonData() {
     xhr = new XMLHttpRequest;       //インスタンス作成
     xhr.onload = function(){        //レスポンスを受け取った時の処理（非同期）
         var res = xhr.responseText;
-        if (res.length>0) alert(res);
+        if (res.length>=0) alert(res);
     };
     xhr.onerror = function(){       //エラーが起きた時の処理（非同期）
         alert("ランキングデータの送信に失敗しました。");
     }
-    xhr.open('post', "https://script.google.com/macros/s/AKfycbyf90ORyywJ-7axQDtmrjAlcoy38xbmzk2tia_4xZy4ZBYqdvvbA5Ic3TAX1B7pnOKBgw/exec", true);    //(1)
+    xhr.open('post', "https://script.google.com/macros/s/AKfycbxR9Z0kjLL4KwQlB4vPq31iPDan9_PlGg14Nh84ZdDk-pqfsYF7rCeC_K9BpA_gc4q7Kg/exec", true);    //(1)
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(json_text);    //送信実行
 }
@@ -401,7 +401,7 @@ function judge(){
       ctx4.fillText('Lv:'+player,200,500,canvas4.width - 400);
       ctx4.fillText('score:'+score,200,600,canvas4.width - 400);
       ctx4.closePath();
-      rankpost();
+      sendJsonData();
     }
   }
 }
@@ -481,7 +481,7 @@ ctx4.fillStyle='#777';
 ctx4.font='100px Roboto midium';
 ctx4.fillText('Press any key...',100,385);
 ctx4.font='25px Roboto midium';
-ctx4.fillText('ver:testplay(0.9.33)',900,25,180);
+ctx4.fillText('ver:testplay(0.9.34)',900,25,180);
 bgm1.load();
 bgm2.load();
 bgm3.load();
