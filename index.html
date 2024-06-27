@@ -129,6 +129,33 @@ function sendJsonData() {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(json_text);    //送信実行
 }
+
+//json送信
+function rankpost(){
+  const jsonData = {
+  "action": "replace",
+  "sheetName": "sales",
+  "rows": [{"ステージ数": "20", "クリア人数": 34}]
+};
+
+// JSON形式の文字列に変換
+const jsonString = JSON.stringify(jsonData);
+
+// Google Apps ScriptのURL
+const scriptUrl = "https://script.google.com/macros/s/AKfycbyf90ORyywJ-7axQDtmrjAlcoy38xbmzk2tia_4xZy4ZBYqdvvbA5Ic3TAX1B7pnOKBgw/exec";
+
+// POSTリクエストを送信
+fetch(scriptUrl, {
+  method: 'POST',
+  body: jsonString,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error(error));
+}
 //モンスターの割り振り関数
 function create(){
   if (stage%3 === 1){
@@ -361,7 +388,7 @@ function judge(){
       ctx4.fillText('Lv:'+player,200,500,canvas4.width - 400);
       ctx4.fillText('score:'+score,200,600,canvas4.width - 400);
       ctx4.closePath();
-      sendJsonData();
+      rankpost();
     }
   }
 }
@@ -441,7 +468,7 @@ ctx4.fillStyle='#777';
 ctx4.font='100px Roboto midium';
 ctx4.fillText('Press any key...',100,385);
 ctx4.font='25px Roboto midium';
-ctx4.fillText('ver:testplay(0.9.29)',900,25,180);
+ctx4.fillText('ver:testplay(0.9.30)',900,25,180);
 bgm1.load();
 bgm2.load();
 bgm3.load();
