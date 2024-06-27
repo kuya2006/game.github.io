@@ -100,75 +100,7 @@ let per=1;
 //
 let clearp=100;
 //functions:
-  
-//ランキング送信テスト
-function sendJsonData() {
-    //連想配列
-    var json_asocc ={
-  "action": "replace",
-  "sheetName": "ranking",
-  "rows": [
-    {"ステージ数": "20", "クリア人数": 13}
-  ]
-};
 
-     
-    //JSONにエンコード
-    var json_text = JSON.stringify(json_asocc);
- 
-    //データを送信
-    xhr = new XMLHttpRequest;       //インスタンス作成
-    xhr.onload = function(){        //レスポンスを受け取った時の処理（非同期）
-        var res = xhr.responseText;
-        if (res.length>=0) alert(res);
-    };
-    xhr.onerror = function(){       //エラーが起きた時の処理（非同期）
-        alert("ランキングデータの送信に失敗しました。");
-    }
-    xhr.open('post', "https://script.google.com/macros/s/AKfycbxR9Z0kjLL4KwQlB4vPq31iPDan9_PlGg14Nh84ZdDk-pqfsYF7rCeC_K9BpA_gc4q7Kg/exec", true);    //(1)
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(json_text);    //送信実行
-}
-
-//json送信
-function rankpost(){
-  const jsonData = {
-  "action": "replace",
-  "sheetName": "ranking",
-  "rows": [{"ステージ数": "20", "クリア人数": 34}]
-};
-
-// JSON形式の文字列に変換
-const jsonString = JSON.stringify(jsonData);
-
-// Google Apps ScriptのURL
-const scriptUrl = "https://script.google.com/macros/s/AKfycbxR9Z0kjLL4KwQlB4vPq31iPDan9_PlGg14Nh84ZdDk-pqfsYF7rCeC_K9BpA_gc4q7Kg/exec";
-
-// POSTリクエストを送信
-  /*
-fetch(scriptUrl, {
-  method: 'POST',
-  body: jsonString,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-})
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error(error));
-*/
-  fetch(scriptUrl, {　 // 送信先URL
-		method: 'post', // 通信メソッド
-		headers: {
-			'Content-Type': 'application/json' // JSON形式のデータのヘッダー
-		},
-		body: JSON.stringify(jsonData) // JSON形式のデータ
-	})
-	.then(response => response.text())
-	.then(data => {
-		console.log(data);
-	});
-}
 //モンスターの割り振り関数
 function create(){
   if (stage%3 === 1){
@@ -401,22 +333,6 @@ function judge(){
       ctx4.fillText('Lv:'+player,200,500,canvas4.width - 400);
       ctx4.fillText('score:'+score,200,600,canvas4.width - 400);
       ctx4.closePath();
-      const newProduct = {
-  "action": "replace",
-  "sheetName": "ranking",
-  "rows": [{"ステージ数": "20", "クリア人数": 34}]
-      };
-	    
-// a POST request
-const response = await fetch('https://script.google.com/macros/s/AKfycbxR9Z0kjLL4KwQlB4vPq31iPDan9_PlGg14Nh84ZdDk-pqfsYF7rCeC_K9BpA_gc4q7Kg/exec', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json; charset=utf-8'
-  },
-  body: JSON.stringify(newProduct)
-});
-
-alert('status:', response.status);
     }
   }
 }
@@ -496,7 +412,7 @@ ctx4.fillStyle='#777';
 ctx4.font='100px Roboto midium';
 ctx4.fillText('Press any key...',100,385);
 ctx4.font='25px Roboto midium';
-ctx4.fillText('ver:testplay(0.9.36)',900,25,180);
+ctx4.fillText('ver:testplay(0.9.25)',900,25,180);
 bgm1.load();
 bgm2.load();
 bgm3.load();
