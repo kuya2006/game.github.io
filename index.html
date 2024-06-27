@@ -145,6 +145,7 @@ const jsonString = JSON.stringify(jsonData);
 const scriptUrl = "https://script.google.com/macros/s/AKfycbxR9Z0kjLL4KwQlB4vPq31iPDan9_PlGg14Nh84ZdDk-pqfsYF7rCeC_K9BpA_gc4q7Kg/exec";
 
 // POSTリクエストを送信
+  /*
 fetch(scriptUrl, {
   method: 'POST',
   body: jsonString,
@@ -155,6 +156,18 @@ fetch(scriptUrl, {
 .then(response => response.json())
 .then(data => console.log(data))
 .catch(error => console.error(error));
+*/
+  fetch(scriptUrl, {　 // 送信先URL
+		method: 'post', // 通信メソッド
+		headers: {
+			'Content-Type': 'application/json' // JSON形式のデータのヘッダー
+		},
+		body: JSON.stringify(jsonData) // JSON形式のデータ
+	})
+	.then(response => response.text())
+	.then(data => {
+		console.log(data);
+	});
 }
 //モンスターの割り振り関数
 function create(){
@@ -468,7 +481,7 @@ ctx4.fillStyle='#777';
 ctx4.font='100px Roboto midium';
 ctx4.fillText('Press any key...',100,385);
 ctx4.font='25px Roboto midium';
-ctx4.fillText('ver:testplay(0.9.32)',900,25,180);
+ctx4.fillText('ver:testplay(0.9.33)',900,25,180);
 bgm1.load();
 bgm2.load();
 bgm3.load();
