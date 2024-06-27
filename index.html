@@ -401,14 +401,22 @@ function judge(){
       ctx4.fillText('Lv:'+player,200,500,canvas4.width - 400);
       ctx4.fillText('score:'+score,200,600,canvas4.width - 400);
       ctx4.closePath();
-      const body = JSON.stringify({
+      const newProduct = {
   "action": "replace",
   "sheetName": "ranking",
   "rows": [{"ステージ数": "20", "クリア人数": 34}]
-      });
-$.post("https://script.google.com/macros/s/AKfycbxR9Z0kjLL4KwQlB4vPq31iPDan9_PlGg14Nh84ZdDk-pqfsYF7rCeC_K9BpA_gc4q7Kg/exec", body, (data, status) => {
-  console.log(data);
-});
+      };
+	    
+// a POST request
+const response = await fetch('https://script.google.com/macros/s/AKfycbxR9Z0kjLL4KwQlB4vPq31iPDan9_PlGg14Nh84ZdDk-pqfsYF7rCeC_K9BpA_gc4q7Kg/exec', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json; charset=utf-8'
+  },
+  body: JSON.stringify(newProduct)
+})
+
+console.log('status:', response.status)
     }
   }
 }
@@ -488,7 +496,7 @@ ctx4.fillStyle='#777';
 ctx4.font='100px Roboto midium';
 ctx4.fillText('Press any key...',100,385);
 ctx4.font='25px Roboto midium';
-ctx4.fillText('ver:testplay(0.9.35)',900,25,180);
+ctx4.fillText('ver:testplay(0.9.36)',900,25,180);
 bgm1.load();
 bgm2.load();
 bgm3.load();
