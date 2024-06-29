@@ -78,7 +78,7 @@ let linex = 300;
 let linespeed = Math.floor(7+stage*1.5);
 //強敵になる確率
 let mimim= 0;
-let grow = stage*mimim;
+let grow = (stage-1)*mimim;
 //モンスター[番号,左座標,右座標,数値]
 let monster = [[1,20,0,20],[1,300,0,5]];
 //プレイヤー数値
@@ -107,11 +107,7 @@ function create(){
     monster = [[1,20,0,0],[2,285,0,0],[2,550,0,0],[1,815,0,0]];
     monstercnt+=2;
     grow = stage*mimim;
-    if(stage!==1){
     per*=(1-grow)**4;
-    }else{
-      grow=0;
-    }
   }else if (stage%3 === 2){
     monster = [[2,90,0,0],[1,440,0,0],[2,790,0,0]];
     monstercnt+=4;
