@@ -297,8 +297,8 @@ function judge(){
       ctx2.beginPath();
       ctx2.clearRect(0,0,canvas2.width,canvas2.height);
       ctx2.closePath();
-      if ((10-time+Dtime)*monster[hit][0]>=0){
-        score+=(10-time+Dtime)*monster[hit][0]*10;
+      if ((10000-time+Dtime) >= 0){
+        score+=(10000-time+Dtime)*monster[hit][0]/100;
         }
       Dtime=time
       monster.splice(hit,1);
