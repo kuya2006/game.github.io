@@ -442,7 +442,7 @@ function keyDownHandler(e) {
     rightPressed = true;
   } else if (e.key === "Left" || e.keyCode === "ArrowLeft" || e.keyCode === 65) {
     leftPressed = true;
-  } else if ((e.key === "Enter" || e.keyCode === 16) && !e.repeat){
+  } else if ((e.key === "Enter" || e.keyCode === 32) && !e.repeat){
     enterPressed = true;
   } 
 }
@@ -451,7 +451,7 @@ function keyUpHandler(e) {
     rightPressed = false;
   } else if (e.key === "Left" || e.key === "ArrowLeft" || e.keyCode === 65) {
     leftPressed = false;
-  }else if (e.key === "Enter" || e.keyCode === 16) {
+  }else if (e.key === "Enter" || e.keyCode === 32) {
     enterPressed = false;
   }
 }
