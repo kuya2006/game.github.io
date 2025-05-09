@@ -411,7 +411,7 @@ ctx4.fillStyle='#777';
 ctx4.font='100px Roboto midium';
 ctx4.fillText('Press any key...',100,385);
 ctx4.font='25px Roboto midium';
-ctx4.fillText('2025/05/10-2',900,25,180);
+ctx4.fillText('2025/05/10-3',900,25,180);
 bgm1.load();
 bgm2.load();
 bgm3.load();
@@ -436,6 +436,7 @@ document.addEventListener("keyup", keyUpHandler, false);
 function keyDownHandler(e) {
   if (!start){
     musicset();
+    console.log(e.key);
   }
   if (e.key === "Right" || e.key === "ArrowRight" || e.keyCode === "68") {
     rightPressed = true;
